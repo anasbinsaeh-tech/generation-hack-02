@@ -3,6 +3,7 @@ import { ArrowRight, Loader2, Sparkles, Target, TrendingUp } from "lucide-react"
 import { useEffect, useState } from "react";
 
 import { Panel, RankBadge, TopNav, XPBar } from "@/components/siuuu";
+import { fallbackAssessment, fallbackMission } from "@/lib/ai-fallback";
 import { assessSubmission, generateMission } from "@/lib/ai.functions";
 import { useT } from "@/lib/i18n";
 import { useSiuuu } from "@/lib/siuuu-store";
@@ -46,10 +47,18 @@ function MissionPage() {
 
   useEffect(() => {
     if (!skill) return;
+    if (import.meta.env.BASE_URL !== "/") {
+      setMission(fallbackMission(skill.name, lang));
+      return;
+    }
     let alive = true;
-    generateMission({ data: { skill: skill.name, lang } }).then((res) => {
-      if (alive) setMission(res.mission);
-    });
+    generateMission({ data: { skill: skill.name, lang } })
+      .then((res) => {
+        if (alive) setMission(res.mission);
+      })
+      .catch(() => {
+        if (alive) setMission(fallbackMission(skill.name, lang));
+      });
     return () => {
       alive = false;
     };
@@ -72,10 +81,18 @@ function MissionPage() {
   async function submit() {
     if (!mission || !skill) return;
     setStage("assessing");
-    const res = await assessSubmission({
-      data: { skill: skill.name, missionTitle: mission.title, answer, lang },
-    });
-    setAssessment(res.assessment);
+    try {
+      if (import.meta.env.BASE_URL !== "/") {
+        setAssessment(fallbackAssessment(answer.length, lang));
+      } else {
+        const res = await assessSubmission({
+          data: { skill: skill.name, missionTitle: mission.title, answer, lang },
+        });
+        setAssessment(res.assessment);
+      }
+    } catch {
+      setAssessment(fallbackAssessment(answer.length, lang));
+    }
     setStage("result");
   }
 
@@ -357,3 +374,4 @@ function Row({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
+
