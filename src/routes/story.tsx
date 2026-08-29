@@ -3,7 +3,7 @@ import { FileUp, FolderUp, Sparkles } from "lucide-react";
 import { useState } from "react";
 
 import { Panel, TopNav } from "@/components/siuuu";
-import { demoStory } from "@/lib/ai-fallback";
+import { demoStory, fallbackSkills } from "@/lib/ai-fallback";
 import { useT } from "@/lib/i18n";
 import { discoverSkills } from "@/lib/ai.functions";
 import { useSiuuu } from "@/lib/siuuu-store";
@@ -38,8 +38,14 @@ function StoryPage() {
     setLoading(true);
     const timer = setInterval(() => setStage((s) => (s + 1) % STAGES.length), 900);
     try {
-      const res = await discoverSkills({ data: { story: text, lang } });
-      setSkills(res.skills);
+      if (import.meta.env.BASE_URL !== "/") {
+        setSkills(fallbackSkills(lang));
+      } else {
+        const res = await discoverSkills({ data: { story: text, lang } });
+        setSkills(res.skills);
+      }
+    } catch {
+      setSkills(fallbackSkills(lang));
     } finally {
       clearInterval(timer);
       setLoading(false);
@@ -122,3 +128,4 @@ function StoryPage() {
     </div>
   );
 }
+
