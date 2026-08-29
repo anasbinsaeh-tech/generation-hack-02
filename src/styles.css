@@ -1,0 +1,179 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-violet: var(--violet);
+  --color-indigo: var(--indigo);
+  --color-signal: var(--signal);
+  --color-signal-foreground: var(--signal-foreground);
+  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, monospace;
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: #fafaf9;
+  --foreground: #16181d;
+  --card: #ffffff;
+  --card-foreground: #16181d;
+  --popover: #ffffff;
+  --popover-foreground: #16181d;
+  --primary: #16181d;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f1ef;
+  --secondary-foreground: #16181d;
+  --muted: #f1f1ef;
+  --muted-foreground: #6b7280;
+  --accent: #ececea;
+  --accent-foreground: #16181d;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: rgba(22, 24, 29, 0.1);
+  --input: rgba(22, 24, 29, 0.16);
+  --ring: #4f46e5;
+  --indigo: #4f46e5;
+  --violet: #4f46e5;
+  --signal: #6366f1;
+  --signal-foreground: #ffffff;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+@utility glass {
+  background: var(--color-card);
+}
+
+@utility grad-text {
+  color: var(--color-foreground);
+}
+
+@utility grad-primary {
+  background-color: var(--color-primary);
+}
+
+@utility glow {
+  box-shadow:
+    0 1px 2px rgba(22, 24, 29, 0.05),
+    0 12px 32px -16px rgba(22, 24, 29, 0.14);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  60% {
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes floaty {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@utility animate-rise {
+  animation: rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility animate-pop {
+  animation: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility animate-floaty {
+  animation: floaty 4s ease-in-out infinite;
+}
+
+@utility animate-spin-reverse {
+  animation: spin-reverse 1.5s linear infinite;
+}
+
+@utility shimmer-bar {
+  background: linear-gradient(90deg, rgba(22, 24, 29, 0.06), rgba(22, 24, 29, 0.28), rgba(22, 24, 29, 0.06));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@utility gradient-shimmer {
+  background: linear-gradient(90deg, var(--color-signal), var(--color-violet), var(--color-signal));
+  background-size: 200% 100%;
+  animation: shimmer 2s linear infinite;
+}
